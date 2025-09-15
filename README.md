@@ -63,8 +63,6 @@ Launch the Streamlit application by running the `app.py` file.
 streamlit run app.py
 ```
 
-The application will open in your default web browser.
-
 ## Usage
 
 1.  **Welcome Screen**: Enter your name and years of experience with Excel.
