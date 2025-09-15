@@ -70,7 +70,7 @@ The application will open in your default web browser.
 1.  **Welcome Screen**: Enter your name and years of experience with Excel.
 2.  **Instructions**: Review the interview instructions while the AI generates your personalized questions.
 3.  **Interview**: For each of the 10 questions:
-    *   You will have 5 seconds to read the question and prepare.
+    *   You will have 40 seconds to read the question and prepare.
     *   You will then be prompted to record your answer. Click the microphone to start and stop the recording.
     *   After recording, your answer will be transcribed and displayed for 10 seconds before automatically moving to the next question.
 4.  **Results**: After the final question, your comprehensive results report will be displayed, including your overall score, performance by category, and personalized recommendations.
