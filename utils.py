@@ -21,6 +21,15 @@ def transcribe_audio(audio_bytes):
     except Exception as e:
         return f"Error processing audio: {e}"
 
+def _clean_json_response(response_text: str) -> str:
+    """Clean the JSON response from Gemini."""
+    text = response_text.strip()
+    if text.startswith("```json"):
+        text = text[7:]
+    if text.endswith("```"):
+        text = text[:-3]
+    return text
+
 def generate_questions_with_gemini(years_of_experience: int) -> List[Dict[str, Any]]:
     """Generate interview questions using Gemini AI"""
     try:
@@ -50,11 +59,7 @@ def generate_questions_with_gemini(years_of_experience: int) -> List[Dict[str, A
         """
         response = model.generate_content(prompt)
         
-        json_response = response.text.strip()
-        if json_response.startswith("```json"):
-            json_response = json_response[7:]
-        if json_response.endswith("```"):
-            json_response = json_response[:-3]
+        json_response = _clean_json_response(response.text)
         
         questions = json.loads(json_response)
         return questions
@@ -96,11 +101,7 @@ def evaluate_answer_with_gemini(question_data: Dict[str, Any], user_answer: str)
         
         response = model.generate_content(prompt)
         
-        json_response = response.text.strip()
-        if json_response.startswith("```json"):
-            json_response = json_response[7:]
-        if json_response.endswith("```"):
-            json_response = json_response[:-3]
+        json_response = _clean_json_response(response.text)
             
         evaluation = json.loads(json_response)
         return evaluation

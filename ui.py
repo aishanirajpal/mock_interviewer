@@ -36,8 +36,8 @@ def loading_screen():
     st.info("Your questions are being generated. In the meantime, please read the instructions below.")
     st.markdown("""
     **Interview Instructions:**
-    - For each question, you will have **5 seconds** to read and prepare your thoughts.
-    - After the preparation time, you will have **60 seconds** to record your answer.
+    - You will be presented with a series of questions tailored to your experience level.
+    - For each question, you will have a moment to prepare before recording your answer.
     - Please aim to be clear and concise in your responses. Good luck!
     """)
     with st.spinner(f"Generating questions for a candidate with {st.session_state.years_of_experience} years of experience..."):
@@ -68,7 +68,7 @@ def interview_screen():
         st.markdown(f'<div class="question-card"><h3>{current_q["question"]}</h3></div>', unsafe_allow_html=True)
         if not st.session_state.start_recording:
             timer_placeholder = st.empty()
-            for i in range(5, 0, -1):
+            for i in range(40, 0, -1):
                 timer_placeholder.info(f"Time to prepare your answer: {i} seconds remaining.")
                 time.sleep(1)
             st.session_state.start_recording = True
@@ -96,15 +96,30 @@ def interview_screen():
                         "evaluation": evaluation,
                         "category": current_q["category"]
                     })
-                st.success(f"Your Transcribed Answer: \"{answer_text}\"")
-                st.info("Your answer has been processed. We will now proceed to the next question.")
-                time.sleep(10)
+                
+                is_last_question = st.session_state.current_question == len(questions) - 1
+
+                if not is_last_question:
+                    st.success(f"Your Transcribed Answer: \"{answer_text}\"")
+                    st.info("Your answer has been processed. We will now proceed to the next question.")
+                    time.sleep(10)
+
+                st.session_state.last_answer = answer_text
                 st.session_state.current_question += 1
                 st.session_state.start_recording = False
                 st.rerun()
     else:
-        st.session_state.stage = 'results'
-        st.rerun()
+        # Interview complete
+        if st.session_state.last_answer:
+            st.success(f"Your Transcribed Answer: \"{st.session_state.last_answer}\"")
+        st.info("Assessment completed. Please check your report.")
+        
+        col1, col2, col3 = st.columns([2, 1, 2])
+        with col2:
+            if st.button("View Results", type="primary", use_container_width=True):
+                st.session_state.last_answer = ""  # Clean up state
+                st.session_state.stage = 'results'
+                st.rerun()
 
 def results_screen():
     """Results and comprehensive report"""
