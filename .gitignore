@@ -1,0 +1,33 @@
+# Virtual environment
+venv/
+
+# Environment variables
+.env
+*.env
+
+# Python cache / compiled files
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.pdb
+*.egg-info/
+
+# Logs
+*.log
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# IDE/editor settings
+.vscode/
+.idea/
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+
+# Build / Dist (if you package your app later)
+build/
+dist/
+*.spec
