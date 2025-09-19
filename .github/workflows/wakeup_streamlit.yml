@@ -1,0 +1,13 @@
+name: Wake up Streamlit App
+
+on:
+  schedule:
+    # Runs every 24 hours (at midnight UTC)
+    - cron: '0 0 * * *'
+
+jobs:
+  wakeup:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send request to Streamlit app
+        run: curl -sS YOUR_STREAMLIT_APP_URL > /dev/null
