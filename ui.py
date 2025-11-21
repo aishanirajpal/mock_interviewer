@@ -48,6 +48,7 @@ def loading_screen():
 def interview_screen():
     """Main interview with voice recording"""
     st.markdown('<div class="main-header"><h2>Excel Skills Interview</h2></div>', unsafe_allow_html=True)
+    
     questions = st.session_state.interview_questions
     if not questions:
         st.error("Could not load interview questions. Please try restarting the assessment.")
@@ -66,6 +67,17 @@ def interview_screen():
             st.write(f"**Experience Level:** {st.session_state.years_of_experience} years")
         current_q = questions[st.session_state.current_question]
         st.markdown(f'<div class="question-card"><h3>{current_q["question"]}</h3></div>', unsafe_allow_html=True)
+        
+        # Check if we should show transition message from previous answer - BELOW the question
+        if st.session_state.show_transition:
+            st.success(f"Your Transcribed Answer: \"{st.session_state.transition_answer}\"")
+            st.info("Your answer has been processed. We will now proceed to the next question.")
+            time.sleep(6)
+            st.session_state.show_transition = False
+            st.session_state.transition_answer = ""
+            st.rerun()
+            return  # Exit to prevent showing recording interface during transition
+        
         if not st.session_state.start_recording:
             timer_placeholder = st.empty()
             for i in range(40, 0, -1):
@@ -74,6 +86,7 @@ def interview_screen():
             st.session_state.start_recording = True
             st.rerun()
         else:
+            
             st.markdown('<div class="recording-status">Voice Recording Mode</div>', unsafe_allow_html=True)
             st.info("Click the microphone to start recording, and click it again when you are finished. Please aim to keep your answer under 60 seconds.")
             audio_bytes = audio_recorder(
@@ -100,11 +113,12 @@ def interview_screen():
                 is_last_question = st.session_state.current_question == len(questions) - 1
 
                 if not is_last_question:
-                    st.success(f"Your Transcribed Answer: \"{answer_text}\"")
-                    st.info("Your answer has been processed. We will now proceed to the next question.")
-                    time.sleep(10)
+                    # Set flag to show transition on next render
+                    st.session_state.show_transition = True
+                    st.session_state.transition_answer = answer_text
+                else:
+                    st.session_state.last_answer = answer_text
 
-                st.session_state.last_answer = answer_text
                 st.session_state.current_question += 1
                 st.session_state.start_recording = False
                 st.rerun()

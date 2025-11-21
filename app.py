@@ -26,6 +26,10 @@ def init_session_state():
         st.session_state.start_recording = False
     if 'last_answer' not in st.session_state:
         st.session_state.last_answer = ""
+    if 'show_transition' not in st.session_state:
+        st.session_state.show_transition = False
+    if 'transition_answer' not in st.session_state:
+        st.session_state.transition_answer = ""
 
 def main():
     """Main function to run the Streamlit app."""
